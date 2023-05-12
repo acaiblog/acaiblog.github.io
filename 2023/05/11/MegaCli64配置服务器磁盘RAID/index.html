@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="MegaCli64配置服务器磁盘RAID"><meta name="keywords" content="RAID"><meta name="author" content="慕容峻才"><meta name="copyright" content="慕容峻才"><title>MegaCli64配置服务器磁盘RAID | 阿才的博客</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.2'
+} </script><meta name="generator" content="Hexo 5.4.2"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%A3%81%E7%9B%98%E4%BF%A1%E6%81%AF"><span class="toc-number">2.</span> <span class="toc-text">查看磁盘信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEraid0"><span class="toc-number">3.</span> <span class="toc-text">配置raid0</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEraid1"><span class="toc-number">4.</span> <span class="toc-text">配置raid1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAJBOD"><span class="toc-number">5.</span> <span class="toc-text">创建JBOD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%82%B9%E7%81%AF"><span class="toc-number">6.</span> <span class="toc-text">磁盘点灯</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">慕容峻才</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">13</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">11</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">8</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">阿才的博客</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">首页</a><a class="site-page" href="/archives">时间线</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">MegaCli64配置服务器磁盘RAID</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-05-11</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Linux/">Linux</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Adapter #0</td>
+<td>阵列卡号,适配器编号</td>
+</tr>
+<tr>
+<td>Enclosure Device ID: 32</td>
+<td>raid卡的ID号</td>
+</tr>
+<tr>
+<td>Slot Number: 0</td>
+<td>物理磁盘的slot号,磁盘位置</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>指定raid类型，比如：raid0、raid1</td>
+</tr>
+<tr>
+<td>WB</td>
+<td>缓存策略</td>
+</tr>
+<tr>
+<td>Direct</td>
+<td>缓存策略</td>
+</tr>
+<tr>
+<td>[32:1]</td>
+<td>指定要操作的硬盘，如要对多个硬盘操作，用逗号“，”隔开,[32:0,32,1]</td>
+</tr>
+<tr>
+<td>-CfgLdAdd</td>
+<td>增加虚拟磁盘，创建raid​</td>
+</tr>
+</tbody></table>
+<h1 id="查看磁盘信息"><a href="#查看磁盘信息" class="headerlink" title="查看磁盘信息"></a>查看磁盘信息</h1><blockquote>
+<p>查看raid级别</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -LDInfo -Lall -aALL</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看raid卡信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -AdpAllInfo -aALL</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看硬盘信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -PDList -aALL</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看适配器个数</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -adpCount</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看所有适配器信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -AdpAllInfo -aAll</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看所有逻辑磁盘组信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -LDInfo -LALL -aAll</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看所有物理磁盘信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -PDList -aAll</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看raid卡型号、raid设置、disk相关信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -cfgdsply -aALL</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看物理硬盘的状态</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -PDList -aALL | egrep <span class="string">&#x27;Firmware state&#x27;</span></span><br></pre></td></tr></table></figure>
+<h1 id="配置raid0"><a href="#配置raid0" class="headerlink" title="配置raid0"></a>配置raid0</h1><blockquote>
+<p>查看磁盘个数</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -PDList -aALL|grep <span class="string">&quot;Slot Number&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>创建raid0</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -CfgLdAdd -r0 [22:1] WB Direct -a0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>检查配置</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -LDInfo -LALL -aAll | grep RAID</span><br></pre></td></tr></table></figure>
+<h1 id="配置raid1"><a href="#配置raid1" class="headerlink" title="配置raid1"></a>配置raid1</h1><blockquote>
+<p>创建raid1</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -CfgLdAdd -r1 [22:1] WB Direct -a0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>检查配置</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -LDInfo -LALL -aAll | grep RAID</span><br></pre></td></tr></table></figure>
+<h1 id="创建JBOD"><a href="#创建JBOD" class="headerlink" title="创建JBOD"></a>创建JBOD</h1><blockquote>
+<p>开启jbod模式</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -AdpSetProp -EnableJBOD -1 -aALL</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>设置磁盘未JBOD</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64  -PDMakeJBOD -PhysDrv[32:1] -a0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>检查磁盘状态</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MegaCli64 -PDList -aALL | egrep <span class="string">&#x27;Firmware state&#x27;</span></span><br></pre></td></tr></table></figure>
+<h1 id="磁盘点灯"><a href="#磁盘点灯" class="headerlink" title="磁盘点灯"></a>磁盘点灯</h1><blockquote>
+<p>对某个磁盘进行点灯操作</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/opt/MegaCli/MegaCli/MegaCli64 -PdLocate -start -physdrv[8:9] -a1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>停止对某个磁盘进行点灯操作</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/opt/MegaCli/MegaCli/MegaCli64 -PdLocate -stop -physdrv[8:9] -a1</span><br></pre></td></tr></table></figure></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">慕容峻才</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.gbcloud.top/2023/05/11/MegaCli64配置服务器磁盘RAID/">http://www.gbcloud.top/2023/05/11/MegaCli64配置服务器磁盘RAID/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.gbcloud.top">阿才的博客</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RAID/">RAID</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2023/05/11/ceph-luminous%E6%8C%87%E5%AE%9A%E7%A3%81%E7%9B%98%E7%B1%BB%E5%9E%8B%E5%88%9B%E5%BB%BA%E5%AD%98%E5%82%A8%E6%B1%A0/"><i class="fa fa-chevron-left">  </i><span>ceph-luminous指定磁盘类型创建存储池</span></a></div><div class="next-post pull-right"><a href="/2023/05/11/Python%E8%B0%83%E7%94%A8Ansible%20API%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1/"><span>Python调用Ansible API执行任务</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2015 - 2023 By 慕容峻才</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

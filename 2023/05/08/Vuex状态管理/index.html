@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Vuex状态管理"><meta name="keywords" content="Vuex"><meta name="author" content="慕容峻才"><meta name="copyright" content="慕容峻才"><title>Vuex状态管理 | 阿才的博客</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.2'
+} </script><meta name="generator" content="Hexo 5.4.2"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vuex%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">Vuex概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87Vux%E5%AE%9E%E7%8E%B0%E5%AD%90%E7%BB%84%E4%BB%B6%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92"><span class="toc-number">2.</span> <span class="toc-text">通过Vux实现子组件数据传递</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vuex%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">vuex实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8vuex%E6%A1%88%E4%BE%8B"><span class="toc-number">2.2.</span> <span class="toc-text">使用vuex案例</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">慕容峻才</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">13</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">11</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">8</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">阿才的博客</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">首页</a><a class="site-page" href="/archives">时间线</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Vuex状态管理</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-05-11</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/VueJS/">VueJS</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="Vuex概念"><a href="#Vuex概念" class="headerlink" title="Vuex概念"></a>Vuex概念</h1><p><code>Vuex</code> 是一个专为 <code>Vue.js</code> 应用程序开发的状态管理模式，它采用集中式存储管理应用的所有组件的状态。<code>Vuex</code> 的存储管理器分为以下几个部分：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>state</td>
+<td>即存储状态的数据。在 <code>Vuex</code> 中，存储状态的数据被定义为一个对象，称为 <code>state</code> 对象。它是所有组件共享的数据源</td>
+</tr>
+<tr>
+<td>getters</td>
+<td>用于从 <code>state</code> 中派生出一些状态，类似于计算属性。<code>Getters</code> 可以让你在模板中使用简单的方法计算衍生出来的状态</td>
+</tr>
+<tr>
+<td>mutations</td>
+<td>用于修改 <code>state</code> 中的数据。<code>Mutations</code> 只能通过提交（<code>commit</code>）来调用，不能直接修改 <code>state</code> 中的数据。这样可以更好地跟踪状态的修改，便于调试。</td>
+</tr>
+<tr>
+<td>actions</td>
+<td>用于处理异步操作，可以包含任意异步操作。<code>Actions</code> 可以包含多个 <code>Mutation</code>，并且可以通过提交（<code>commit</code>）调用 <code>Mutation</code>。<code>Actions</code> 中的操作是异步的，可以用来处理网络请求等操作。</td>
+</tr>
+<tr>
+<td>modules</td>
+<td>用于将 <code>Vuex</code> 的 <code>store</code> 分割成模块。每个模块拥有自己的 <code>state</code>、<code>mutations</code>、<code>actions</code> 和 <code>getters</code>。</td>
+</tr>
+</tbody></table>
+<p>具体目录如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">store</span><br><span class="line">├── getters.js</span><br><span class="line">├── index.js</span><br><span class="line">└── modules</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<table>
+<thead>
+<tr>
+<th>目录/文件名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>modules</td>
+<td>目录存放了 Vuex 中的模块（module），可以根据业务需求将不同的状态分离成不同的模块</td>
+</tr>
+<tr>
+<td>getters.js</td>
+<td>存放了所有的 Vuex getter 函数，getter 函数可以认为是 store 中的计算属性</td>
+</tr>
+<tr>
+<td>index.js</td>
+<td>是 Vuex 的主入口文件，它用于创建和配置 Vuex store 实例，将 state、mutations、actions、getters 和 modules 等组合在一起</td>
+</tr>
+</tbody></table>
+<h1 id="通过Vux实现子组件数据传递"><a href="#通过Vux实现子组件数据传递" class="headerlink" title="通过Vux实现子组件数据传递"></a>通过Vux实现子组件数据传递</h1><h2 id="vuex实现"><a href="#vuex实现" class="headerlink" title="vuex实现"></a>vuex实现</h2><ol>
+<li>在modules目录下创建ad.js文件，文件内容如下：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#vi src/store/modules/ad.js</span><br><span class="line">import api from &#x27;@/api/ad&#x27;</span><br><span class="line"></span><br><span class="line">const state = &#123;</span><br><span class="line">  // 初始化变量以及接受数据的类型</span><br><span class="line">  tableDataList: []</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const mutations = &#123;</span><br><span class="line">  // 主要用来修改state中变量的数据，传递的data的数据类型必须是变量可以接受的数据类型</span><br><span class="line">  // 比如Array</span><br><span class="line">  setTableData(state, data) &#123;</span><br><span class="line">    state.tableDataList = data</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">  // actions的函数名称用来调用action触发mutations来达到修改数据</span><br><span class="line">const actions = &#123;</span><br><span class="line">  async searchTableData(&#123; commit &#125;, searchData) &#123;</span><br><span class="line">    const &#123; data &#125; = await api.list(searchData)</span><br><span class="line">    // 将获取的数据处理成Array之后通过commit方法触发mutations的setTableData函数修改state的值</span><br><span class="line">    commit(&#x27;setTableData&#x27;, data.results)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  // 如果开启命名空间则访问actions函数时需要带上命名空间的名称，</span><br><span class="line">  // 比如this.$store.dispatch(&#x27;ad/searchTableData&#x27;, data) </span><br><span class="line">  // 这里的ad就是命名空间，命名空间的名字和模块名字保持一致</span><br><span class="line">  namespaced: true,</span><br><span class="line">  state,</span><br><span class="line">  mutations,</span><br><span class="line">  actions</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>设置getters</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi src/store/getters.js</span><br><span class="line">const getters = &#123;</span><br><span class="line">  tableDataList: state =&gt; state.ad.tableDataList</span><br><span class="line">&#125;</span><br><span class="line">export defaults getters</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在index.js中将vuex属性导入store</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import Vue from &#x27;vue&#x27;</span><br><span class="line">import Vuex from &#x27;vuex&#x27;</span><br><span class="line">import getters from &#x27;./getters&#x27;</span><br><span class="line">import ad from &#x27;./modules/ad&#x27;</span><br><span class="line"></span><br><span class="line">Vue.use(Vuex)</span><br><span class="line"></span><br><span class="line">const store = new Vuex.Store(&#123;</span><br><span class="line">  modules: &#123;</span><br><span class="line">    ad</span><br><span class="line">  &#125;,</span><br><span class="line">  getters</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">export default store</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用vuex案例"><a href="#使用vuex案例" class="headerlink" title="使用vuex案例"></a>使用vuex案例</h2><blockquote>
+<p>需求</p>
+</blockquote>
+<ol>
+<li>有三个组件index.vue、search.vue、tableList.vue</li>
+<li>index.vue为search.vue和tablelist.vue的父组件</li>
+<li>需要实现search.vue点击button按钮之后将数据传递给tablelist.vue组件，并且将数据在tablelist组件上展示出来</li>
+</ol>
+<blockquote>
+<p>在index.vue中导入子组件</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div style=&quot;margin-top: 10px&quot;&gt;</span><br><span class="line">    &lt;search&gt;&lt;/search&gt;</span><br><span class="line">    &lt;table-list style=&quot;margin-top: -10px&quot;&gt;&lt;/table-list&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">import search from &#x27;@/views/ad/search&#x27;</span><br><span class="line">import tableList from &#x27;@/views/ad/tableList&#x27;</span><br><span class="line">export default &#123;</span><br><span class="line">  // eslint-disable-next-line vue/no-unused-components</span><br><span class="line">  components: &#123; search, tableList &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在search.vue组件中定义一个函数，点击button时调用这个函数</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">methods: &#123;</span><br><span class="line">  queryData() &#123;</span><br><span class="line">    // ad/ 代表使用ad命名空间下的searchTableData</span><br><span class="line">    this.$store.dispatch(&#x27;ad/searchTableData&#x27;, this.searchMap)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在tableList.vue组件中定义要展示的数据</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">computed: &#123;</span><br><span class="line">  // 使用mapState函数将ad命名空间下tableDataList变量中的数据获取并赋值给el-table标签传递给table显示数据</span><br><span class="line">  ...mapState(&#x27;ad&#x27;, [&#x27;tableDataList&#x27;])</span><br><span class="line">&#125;,</span><br><span class="line">created() &#123;</span><br><span class="line">  // created钩子函数调用searchTableData actions将调用api接口获取到的数据通过commit触发mutations函数将数据保存到state中让computed调用</span><br><span class="line">  this.$store.dispatch(&#x27;ad/searchTableData&#x27;, this.searchMap)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">慕容峻才</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.gbcloud.top/2023/05/08/Vuex状态管理/">http://www.gbcloud.top/2023/05/08/Vuex状态管理/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.gbcloud.top">阿才的博客</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Vuex/">Vuex</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2023/05/09/git-svn%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fa fa-chevron-left">  </i><span>git svn常用命令</span></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2015 - 2023 By 慕容峻才</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
